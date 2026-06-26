@@ -9,6 +9,8 @@ class Meetings(BaseModel):
     duration: str
     notes: str
 
+    
+
 
 class MeetingManager:
     def __init__(self):
@@ -38,5 +40,27 @@ def main():
 
 
 if __name__ == "__main__":
-    m = Meetings(id="1", title="", date="", start_time="", duration="", notes="")
-    print(m)
+    manager = MeetingManager()
+    manager.add_meeting(
+        Meetings(
+            id="1",
+            title="test",
+            date="2026-07-10",
+            start_time="10.00",
+            duration="1H",
+            notes="Na",
+        )
+    )
+    print(manager.get_meetings())
+    manager.update_meeting(
+        "1",
+        Meetings(
+            id="1",
+            title="test",
+            date="2026-07-10",
+            start_time="11.00",
+            duration="1H",
+            notes="Na",
+        ),
+    )
+    print(manager.get_meetings())
