@@ -72,5 +72,51 @@ def get_meetings() -> list[Meetings]:
     return meetings
 
 
-if __name__ == "__main__":
-    print(get_meetings())
+def delete_meeting(meeting_id: str):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM meetings WHERE id = ?", (meeting_id,))
+    conn.commit()
+    conn.close()
+
+
+def update_meeting(meeting_id: str, meeting: Meetings):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        UPDATE meetings
+        SET title = ?, date = ?, start_time = ?, duration = ?, notes = ?, participants = ?
+        WHERE id = ?
+        """,
+        (
+            meeting.title,
+            meeting.date,
+            meeting.start_time,
+            meeting.duration,
+            meeting.notes,
+            meeting.participants_str,
+            meeting_id,
+        ),
+    )
+    conn.commit()
+    conn.close()
+
+
+def get_meeting(meeting_id: str) -> Meetings | None:
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM meetings WHERE id = ?", (meeting_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return Meetings(
+            id=row[0],
+            title=row[1],
+            date=row[2],
+            start_time=row[3],
+            duration=row[4],
+            notes=row[5],
+            participants=row[6].split(","),
+        )
+    return None
