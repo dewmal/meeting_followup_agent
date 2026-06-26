@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from pydantic.fields import computed_field
+from pydantic.functional_validators import field_validator
 
 
 class Meetings(BaseModel):
@@ -11,8 +12,18 @@ class Meetings(BaseModel):
     notes: str
     participants: list[EmailStr]
 
+    @field_validator("start_time")
+    @classmethod
+    def validate_start_time(cls, value):
+        hours = int(value.split(":")[0])
+        minutes = int(value.split(":")[1])
+        if not (0 <= hours < 24 and 0 <= minutes < 60):
+            raise ValueError("Invalid start time")
+        return value
+
     @computed_field
     def end_time(self) -> str:
+        print(self.start_time, type(self.start_time))
         hours, minutes = map(int, self.duration.split(":"))
         print(
             f"start_time: {self.start_time}, duration: {self.duration}",
@@ -74,20 +85,16 @@ if __name__ == "__main__":
             participants=["abc@example.com"],
         )
     )
-    print(manager.get_meetings())
     manager.update_meeting(
         "1",
         Meetings(
             id="1",
             title="test",
             date="2026-07-10",
-            start_time="11:00",
+            start_time="26:00",
             duration="01:00",
             notes="Na",
             participants=["abc@example.com"],
         ),
     )
     print(manager.get_meetings())
-
-    m = manager.get_meeting("1")
-    print(m.end_time)
