@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from pydantic.fields import computed_field
 
 
@@ -9,6 +9,7 @@ class Meetings(BaseModel):
     start_time: str  # HH:MM
     duration: str  # HH:MM
     notes: str
+    participants: list[EmailStr]
 
     @computed_field
     def end_time(self) -> str:
@@ -70,6 +71,7 @@ if __name__ == "__main__":
             start_time="10:00",
             duration="01:00",
             notes="Na",
+            participants=["abc@example.com"],
         )
     )
     print(manager.get_meetings())
@@ -82,6 +84,7 @@ if __name__ == "__main__":
             start_time="11:00",
             duration="01:00",
             notes="Na",
+            participants=["abc@example.com"],
         ),
     )
     print(manager.get_meetings())
