@@ -2,6 +2,8 @@ from pydantic import BaseModel, EmailStr
 from pydantic.fields import computed_field
 from pydantic.functional_validators import field_validator
 
+from db import create_table
+
 
 class Meetings(BaseModel):
     id: str
@@ -41,6 +43,7 @@ class Meetings(BaseModel):
 
 class MeetingManager:
     def __init__(self):
+        create_table()
         self._meetings: list[Meetings] = []
 
     def add_meeting(self, meeting: Meetings):
@@ -91,7 +94,7 @@ if __name__ == "__main__":
             id="1",
             title="test",
             date="2026-07-10",
-            start_time="26:00",
+            start_time="12:00",
             duration="01:00",
             notes="Na",
             participants=["abc@example.com"],
