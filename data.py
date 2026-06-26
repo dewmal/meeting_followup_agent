@@ -35,3 +35,7 @@ class Meetings(BaseModel):
         # Need to handle minute overflow and hour overflow and day overflow
 
         return f"{end_hour:02d}:{end_minute:02d}"
+
+    @computed_field
+    def participants_str(self) -> str:
+        return ", ".join(self.participants)

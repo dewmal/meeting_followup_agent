@@ -1,5 +1,5 @@
 from data import Meetings
-from meeting_manager import MeetingManager
+from meetings_mgt import MeetingManager
 
 
 def main():

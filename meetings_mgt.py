@@ -1,5 +1,5 @@
 from data import Meetings
-from db import create_table
+from db import create_table, insert_meeting
 
 
 class MeetingManager:
@@ -8,6 +8,7 @@ class MeetingManager:
         self._meetings: list[Meetings] = []
 
     def add_meeting(self, meeting: Meetings):
+        insert_meeting(meeting)
         self._meetings.append(meeting)
 
     def get_meetings(self) -> list[Meetings]:
