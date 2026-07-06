@@ -1,5 +1,9 @@
+from dotenv import load_dotenv
+
 from data import Meetings
 from meetings_mgt import MeetingManager
+
+load_dotenv()
 
 
 def main():
